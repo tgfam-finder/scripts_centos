@@ -1,0 +1,64 @@
+#!/bin/sh
+cd setTGFamSoftLoc;
+wget http://tgfam-finder.snu.ac.kr/data/bowtie2-2.3.1-legacy-linux-x86_64.zip;
+wget http://tgfam-finder.snu.ac.kr/data/hmmer-3.1b2-linux-intel-x86_64.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/ncbi-blast-2.6.0+-x64-linux.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/ncbi-blast-2.6.0+-x64-linux.tar.gz.md5;
+wget http://tgfam-finder.snu.ac.kr/data/exonerate-2.2.0-x86_64.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/tophat-2.1.1.Linux_x86_64.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/cufflinks-2.2.1.Linux_x86_64.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/scipio-1.4.zip;
+wget http://tgfam-finder.snu.ac.kr/data/augustus-3.2.3.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/blat.tar.gz;
+wget http://tgfam-finder.snu.ac.kr/data/clustalw-2.1-linux-x86_64-libcppstatic.tar.gz;
+wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.22-61.0/interproscan-5.22-61.0-64-bit.tar.gz;
+wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.22-61.0/interproscan-5.22-61.0-64-bit.tar.gz.md5;
+
+md5sum -c interproscan-5.22-61.0-64-bit.tar.gz.md5;
+tar zxvf interproscan-5.22-61.0-64-bit.tar.gz;
+unzip -o bowtie2-2.3.1-legacy-linux-x86_64.zip;
+tar zxvf hmmer-3.1b2-linux-intel-x86_64.tar.gz;
+md5sum ncbi-blast-2.6.0+-x64-linux.tar.gz.md5;
+tar zxvf ncbi-blast-2.6.0+-x64-linux.tar.gz;
+tar zxvf exonerate-2.2.0-x86_64.tar.gz;
+tar zxvf tophat-2.1.1.Linux_x86_64.tar.gz;
+tar zxvf cufflinks-2.2.1.Linux_x86_64.tar.gz;
+unzip -o scipio-1.4.zip;
+tar zxvf augustus-3.2.3.tar.gz;
+tar zxvf blat.tar.gz;
+tar zxvf clustalw-2.1-linux-x86_64-libcppstatic.tar.gz;
+
+rm -rf interproscan-5.22-61.0-64-bit.tar.gz;
+rm -rf interproscan-5.22-61.0-64-bit.tar.gz.md5;
+rm -rf bowtie2-2.3.1-legacy-linux-x86_64.zip;
+rm -rf hmmer-3.1b2-linux-intel-x86_64.tar.gz;
+rm -rf ncbi-blast-2.6.0+-x64-linux.tar.gz.md5;
+rm -rf ncbi-blast-2.6.0+-x64-linux.tar.gz;
+rm -rf exonerate-2.2.0-x86_64.tar.gz;
+rm -rf tophat-2.1.1.Linux_x86_64.tar.gz;
+rm -rf cufflinks-2.2.1.Linux_x86_64.tar.gz;
+rm -rf scipio-1.4.zip;
+rm -rf augustus-3.2.3.tar.gz;
+rm -rf blat.tar.gz;
+rm -rf tar zxvf clustalw-2.1-linux-x86_64-libcppstatic.tar.gz;
+
+yum -y update;
+yum -y install gcc gcc-c++;
+yum -y install zlib-devel;
+yum -y install libpng libpng-devel;
+yum -y install ncurses ncurses-devel;
+
+## AUGUSTUS ##
+make -C setTGFamSoftLoc/augustus-3.2.3/src/;
+export AUGUSTUS_CONFIG_PATH=setTGFamSoftLoc/augustus-3.2.3/config/;
+
+## Hmmer ##
+cd setTGFamSoftLoc/hmmer-3.1b2-linux-intel-x86_64;
+setTGFamSoftLoc/hmmer-3.1b2-linux-intel-x86_64/configure;
+make -C setTGFamSoftLoc/hmmer-3.1b2-linux-intel-x86_64/;
+make check -C setTGFamSoftLoc/hmmer-3.1b2-linux-intel-x86_64/;
+
+## tophat bowtie link ##
+cd setTGFamSoftLoc/tophat-2.1.1.Linux_x86_64;
+
+ln -s setTGFamSoftLoc/bowtie2-2.3.1-legacy/bowtie2 setTGFamSoftLoc/tophat-2.1.1.Linux_x86_64/;

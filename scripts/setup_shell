@@ -1,0 +1,56 @@
+PATH=$PATH:BOWTIE_PATH;
+export AUGUSTUS_CONFIG_PATH;
+
+###############################################################
+
+cd RUNNING_PATH;
+perl TGFAM_SCRIPTS_PATH/0.SixFrameTranslation.pl CONF1 CONF2 CONF3;
+perl TGFAM_SCRIPTS_PATH/1.Domain_Identification.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/PROTEIN_MAPPING_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/2.1.Auto_ProteinMapping.pl CONF1 CONF2 CONF3;
+
+cd RUNNING_PATH/PROTEIN_MAPPING_ANALYSIS_PATH/temp_protein.OUTPUT_PREFIX_DOMAIN_NAME;
+perl TGFAM_SCRIPTS_PATH/2.2.Auto_ProteinMapping.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/ISGAP_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/3.1.Auto_ISGAP.pl CONF1 CONF2 CONF3;
+
+cd RUNNING_PATH/ISGAP_ANALYSIS_PATH/temp_ISGAP.OUTPUT_PREFIX_DOMAIN_NAME;
+perl TGFAM_SCRIPTS_PATH/3.2.Auto_ISGAP.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/MERGING_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/4.1.Auto_Augustus.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/AUGUSTUS_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/4.2.Auto_Augustus.pl CONF1 CONF2 CONF3;  
+
+###############################################################
+
+cd RUNNING_PATH/RNASEQ_AUGUSTUS_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/4.3.Auto_Augustus.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/PM_AUGUSTUS_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/4.4.1.Auto_Augustus.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/ISGAP_AUGUSTUS_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/4.4.2.Auto_Augustus.pl CONF1 CONF2 CONF3;
+
+###############################################################
+
+cd RUNNING_PATH/MERGING_ANALYSIS_PATH;
+perl TGFAM_SCRIPTS_PATH/5.Generating_FinalGeneModel.pl CONF1 CONF2 CONF3;
+
+###############################################################
