@@ -81,37 +81,37 @@ To run TGFam-Finder, users should prepare RESOURCE.config including full locatio
     13. $CUFFLINKS_PATH = "";  ## Directory path including cufflinks execution file
     
 	## OUTPUT PATH OF ANALYSIS RESULTS ##
-	1.	$AUGUSTUS_ANALYSIS_PATH="";  ## Augustus annotation output directory name that will be created in RUNNING_PATH ex) Augustus
-	2.	$ISGAP_ANALYSIS_PATH="";  ## ISGAP output directory name
-	3.	$MERGING_ANALYSIS_PATH="";  ## Output directory name for merging initial gene models
-	4.	$PROTEIN_MAPPING_ANALYSIS_PATH="";  ## Protein mapping output directory name
-	5.	$RNASEQ_AUGUSTUS_ANALYSIS_PATH="";  ## Output directory name of augustus annotation for assembled transcripts
-	6.	$PM_AUGUSTUS_ANALYSIS_PATH="";  ## Output directory name for comparison between protein mapping and augustus
-	7.	$ISGAP_ AUGUSTUS_ANALYSIS_PATH="";  ## Output directory for comparison of results between ISGAP and augustus annotations
-	8.	$FINAL_ANALYSIS_PATH="";  ## Final result output directory name
+	1. $AUGUSTUS_ANALYSIS_PATH="";  ## Augustus annotation output directory name that will be created in RUNNING_PATH ex) Augustus
+	2. $ISGAP_ANALYSIS_PATH="";  ## ISGAP output directory name
+	3. $MERGING_ANALYSIS_PATH="";  ## Output directory name for merging initial gene models
+	4. $PROTEIN_MAPPING_ANALYSIS_PATH="";  ## Protein mapping output directory name
+	5. $RNASEQ_AUGUSTUS_ANALYSIS_PATH="";  ## Output directory name of augustus annotation for assembled transcripts
+	6. $PM_AUGUSTUS_ANALYSIS_PATH="";  ## Output directory name for comparison between protein mapping and augustus
+	7. $ISGAP_ AUGUSTUS_ANALYSIS_PATH="";  ## Output directory for comparison of results between ISGAP and augustus annotations
+	8. $FINAL_ANALYSIS_PATH="";  ## Final result output directory name
 
 > 3.2. RESOURCE.config
 
     ## REQUIRED INFORMATION ##
-    1.	$TARGET_GENOME = "";  ## Full path of assembled genome (ex, path/filename), fasta format
-    2.	$PROTEINS_FOR_DOMAIN_IDENTIFICATION = "";  ## Full path of peptide sequences of target or allied species, fasta format
-    3.	$TSV_FOR_DOMAIN_IDENTIFICATION = "";  ## Full path of InterPro result of the peptide sequences, tsv format
-    4.	$RESOURCE_PROTEIN = "";  ## Full path of target peptide sequences in multiple species that users prepare as resources for each annotation step, fasta format
-    5.	$BLAST_DB_NAME = "";  ## Full path of BLAST DB that will be automatically created
-    6.	$OUTPUT_PREFIX = "";  ## Output prefix generated results
-    7.	$TARGET_DOMAIN_ID = "";  ## Target domain ID saved in fifth column of tsv files such as PF00000, SSF00000, and SM00000, not IPR number
-    8.	$TARGET_DOMAIN_NAME = "";  ## target domain name(s)
-    9.	$REPRESENTATIVE_DOMAIN_NAME = "";  ## Target gene-family name
-    10.	$EXTENSION_LENGTH = "";  ## Extension length for flanking regions of target domain
-    11.	$MAX_INTRON_LENGTH = "";  ## Max intron length
-    12.	$THREADS = "";  ## Number of threads
+    1. $TARGET_GENOME = "";  ## Full path of assembled genome (ex, path/filename), fasta format
+    2. $PROTEINS_FOR_DOMAIN_IDENTIFICATION = "";  ## Full path of peptide sequences of target or allied species, fasta format
+    3. $TSV_FOR_DOMAIN_IDENTIFICATION = "";  ## Full path of InterPro result of the peptide sequences, tsv format
+    4. $RESOURCE_PROTEIN = "";  ## Full path of target peptide sequences in multiple species that users prepare as resources for each annotation step, fasta format
+    5. $BLAST_DB_NAME = "";  ## Full path of BLAST DB that will be automatically created
+    6. $OUTPUT_PREFIX = "";  ## Output prefix generated results
+    7. $TARGET_DOMAIN_ID = "";  ## Target domain ID saved in fifth column of tsv files such as PF00000, SSF00000, and SM00000, not IPR number
+    8. $TARGET_DOMAIN_NAME = "";  ## target domain name(s)
+    9. $REPRESENTATIVE_DOMAIN_NAME = "";  ## Target gene-family name
+    10. $EXTENSION_LENGTH = "";  ## Extension length for flanking regions of target domain
+    11. $MAX_INTRON_LENGTH = "";  ## Max intron length
+    12. $THREADS = "";  ## Number of threads
 
     ## OPTIONAL INFORMATION ##
-    1.	$CDS_OF_TARGET_GENOME = "";  ## Full path of coding DNA sequences of the target genome, fasta format
-    2.	$GFF3_OF_TARGET_GENOME = "";  ## Full path of GFF3 of the target genome, gff3 
-    3.	$RNASEQ_FORWARD_PATH = "";  ## Full path of RNA-seq (forward), fastaq format
-    4.	$RNASEQ_REVERSE_PATH = "";  ## Full path of RNA-seq (reverse), fastaq format
-    5.	$EXCLUDED_DOMAIN_ID = "";  ## Excluded Target domain ID
+    1. $CDS_OF_TARGET_GENOME = "";  ## Full path of coding DNA sequences of the target genome, fasta format
+    2. $GFF3_OF_TARGET_GENOME = "";  ## Full path of GFF3 of the target genome, gff3 
+    3. $RNASEQ_FORWARD_PATH = "";  ## Full path of RNA-seq (forward), fastaq format
+    4. $RNASEQ_REVERSE_PATH = "";  ## Full path of RNA-seq (reverse), fastaq format
+    5. $EXCLUDED_DOMAIN_ID = "";  ## Excluded Target domain ID
     
 
 **Note.** If you have problems for preparation of config files, see the section 6.2 and 6.3.
@@ -315,7 +315,7 @@ TGFam-Finder provides an automatic install script, but if you want to use TGFam-
 - Users can input multiple ‘TARGET_DOMAIN_ID’, ‘TARGET_DOMAIN_NAME’ using comma delimiter but target domain names should be distinct.
 
 		ex) $TARGET_DOMAIN_ID = “PF00319,cd00265”
-	    	$TARGET_DOMAIN_NAME = “SRF,MEF”
+	        $TARGET_DOMAIN_NAME = “SRF,MEF”
 
 - If users want to obtain final gene model including existing gene model of the target genome, users need to input CDS_OF_TARGET_GENOME and GFF3_OF_TARGET_GENOME. 
 - IDs in peptides (not RESOURCE_PROTEIN), tsv, coding DNA sequences, and gff3 should be matched. If users use merged peptides and tsv of genomes including target and allied species, IDs of the peptides and tsv should contain IDs of CDS and gff3. 
