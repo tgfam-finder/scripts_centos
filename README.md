@@ -315,7 +315,7 @@ TGFam-Finder provides an automatic install script, but if you want to use TGFam-
 - Users can input multiple ‘TARGET_DOMAIN_ID’, ‘TARGET_DOMAIN_NAME’ using comma delimiter but target domain names should be distinct.
 
 		ex) $TARGET_DOMAIN_ID = “PF00319,cd00265”
-	        $TARGET_DOMAIN_NAME = “SRF,MEF”
+		    $TARGET_DOMAIN_NAME = “SRF,MEF”
 
 - If users want to obtain final gene model including existing gene model of the target genome, users need to input CDS_OF_TARGET_GENOME and GFF3_OF_TARGET_GENOME. 
 - IDs in peptides (not RESOURCE_PROTEIN), tsv, coding DNA sequences, and gff3 should be matched. If users use merged peptides and tsv of genomes including target and allied species, IDs of the peptides and tsv should contain IDs of CDS and gff3. 
