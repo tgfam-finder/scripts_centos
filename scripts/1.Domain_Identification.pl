@@ -12,6 +12,7 @@ use strict;
 my $stData = $TARGET_GENOME; ### genome fasta file (tempID)
 my $stGff3 = $GFF3_OF_TARGET_GENOME;
 my $stTSV = $TSV_FOR_DOMAIN_IDENTIFICATION;
+my $stTSVOutput = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 my $stPEP = $PROTEINS_FOR_DOMAIN_IDENTIFICATION;
 my $stPrefix = $OUTPUT_PREFIX;
 my $stPfamIDs = $TARGET_DOMAIN_ID;
@@ -39,7 +40,7 @@ for(my $i=0; $i<@stPfamID; $i++)
 	my %NB;
 	my $num=0;
 
-open FH, ">", "$stTSV.FilteredBy$stDomain[$i]domain.$nPerc" || die ("Can't open myfile");
+open FH, ">", "$RUNNING_PATH/$stTSVOutput.FilteredBy$stDomain[$i]domain.$nPerc" || die ("Can't open myfile");
 	open(DATA, "$stData");
 	while(my $stLine = <DATA>)
 	{
@@ -68,7 +69,7 @@ open FH, ">", "$stTSV.FilteredBy$stDomain[$i]domain.$nPerc" || die ("Can't open 
 		}
 	}
 close FH;
-system("cp -rf $stTSV.FilteredBy$stDomain[$i]domain.$cut $RUNNING_PATH/");
+#system("cp -rf $stTSV.FilteredBy$stDomain[$i]domain.$cut $RUNNING_PATH/");
 
 #	$stData = undef;
 	my $nPerc ="100";	###	percent
@@ -77,7 +78,7 @@ system("cp -rf $stTSV.FilteredBy$stDomain[$i]domain.$cut $RUNNING_PATH/");
 	my @NB=();
 	my $num=0;
 
-open FH1, ">", "$stTSV.FilteredBy$stDomain[$i]domain.all" || die ("Can't open myfile");
+open FH1, ">", "$RUNNING_PATH/$stTSVOutput.FilteredBy$stDomain[$i]domain.all" || die ("Can't open myfile");
 	open(DATA1, "$stData");
 	while(my $stLine = <DATA1>)
 	{
@@ -97,9 +98,9 @@ open FH1, ">", "$stTSV.FilteredBy$stDomain[$i]domain.all" || die ("Can't open my
 	}
 close FH1;
 
-system("cp -rf $stTSV.FilteredBy$stDomain[$i]domain.all $RUNNING_PATH/");
+#system("cp -rf $stTSV.FilteredBy$stDomain[$i]domain.all $RUNNING_PATH/");
 
-my $stData = "$stTSV.FilteredBy$stDomain[$i]domain.$nPerc"; # NB-ARC.tsv file such as 1_0.at_10.fasta.onlyNB-ARC.sorted.tsv
+my $stData = "$RUNNING_PATH/$stTSVOutput.FilteredBy$stDomain[$i]domain.$nPerc"; # NB-ARC.tsv file such as 1_0.at_10.fasta.onlyNB-ARC.sorted.tsv
 my $stPEP = $PROTEINS_FOR_DOMAIN_IDENTIFICATION;
 my %ID;
 my $nbID="";
@@ -240,7 +241,7 @@ open FH3, ">$stPrefix."."$stDomain[$i]"."domain.$nPerc.fasta" || die ("Can't ope
 close FH3;
 
 
-	my $stData = "$stTSV.FilteredBy$stDomain[$i]domain.all"; # NB-ARC.tsv file such as 1_0.at_10.fasta.onlyNB-ARC.sorted.tsv
+	my $stData = "$RUNNING_PATH/$stTSVOutput.FilteredBy$stDomain[$i]domain.all"; # NB-ARC.tsv file such as 1_0.at_10.fasta.onlyNB-ARC.sorted.tsv
 	my $stPEP = $PROTEINS_FOR_DOMAIN_IDENTIFICATION;
 	my %ID;
 	my $nbID="";
@@ -561,8 +562,9 @@ open FH10, ">", "$stPrefix.Final.$stRepreDom\domain.search.out.Extended.RemoveRe
 close FH10;
 
 ###	Genome masking	###
+	my $stPrefixData = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 	my $stData = "$stPrefix.Final.$stRepreDom\domain.search.out.Extended.RemoveRedundant";
-	my $stGenome = "$TARGET_GENOME.tempID.fasta";
+	my $stGenome = "$stPrefixData.tempID.fasta";
 	my %Info;
 	my $stID="";
 	my $num=0;

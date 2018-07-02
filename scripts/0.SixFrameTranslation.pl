@@ -12,6 +12,7 @@ use strict;
 my $stData = $TARGET_GENOME; ### genome fasta file (tempID)
 my $stGff3 = $GFF3_OF_TARGET_GENOME;
 my $stPrefix = $OUTPUT_PREFIX;
+my $stPrefixData = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 
 my $stOut = $stData;
 $stOut =~ s/\.fna//;
@@ -25,9 +26,9 @@ my $newID="";
 my $seq="";
 my $num=0;
 
-open FH1, ">", "$stData.tempID.fasta" || die ("Can't open myfile");
+open FH1, ">", "$stPrefixData.tempID.fasta" || die ("Can't open myfile");
 open(DATA, "$stData");
-open FH, ">", "$stData.changeID.Info";
+open FH, ">", "$stPrefixData.changeID.Info";
 while(my $stLine = <DATA>)
 {
         chomp($stLine);
@@ -67,7 +68,7 @@ my @stGene;
 my @stCDS;
 my $nIdx1=0;
 
-open FH5, ">", "$GFF3_OF_TARGET_GENOME.sort" || die ("Can't open myfile");
+open FH5, ">", "$RUNNING_PATH/$stPrefixData.sort" || die ("Can't open myfile");
 
 open(DATA, "$stGff");
 while(my $stLine = <DATA>)
@@ -137,11 +138,11 @@ if($#stCDS != -1)
 
 close FH5;
 
-my $stData = "$GFF3_OF_TARGET_GENOME.sort"; ### gff
-my $stInfo = "$TARGET_GENOME.changeID.Info"; ### changeID Info
+my $stData = "$RUNNING_PATH/$stPrefixData.sort"; ### gff
+my $stInfo = "$stPrefixData.changeID.Info"; ### changeID Info
 my %ID;
 
-open FH2, ">", "$GFF3_OF_TARGET_GENOME.tempID.gff3" || die ("Can't open myfile");
+open FH2, ">", "$stPrefixData.tempID.gff3" || die ("Can't open myfile");
 
 open(DATA, "$stInfo");
 while(my $stLine = <DATA>)
@@ -175,7 +176,7 @@ close FH2;
 ###     Six frame translation   ###
 
 my $stData= "$TGFAM_SCRIPTS_PATH/CodonUsage"; #codon usage
-my $stGenome= "$TARGET_GENOME.tempID.fasta"; #genome fasta file, sequences should be connected 
+my $stGenome= "$stPrefixData.tempID.fasta"; #genome fasta file, sequences should be connected 
 my ($count, $count1, $countX, $num)=(0,0,0,0);
 my $length="";
 my $last="";

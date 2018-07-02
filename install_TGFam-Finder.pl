@@ -21,6 +21,13 @@ system("perl -pi -e 's|setTGFamSoftLoc|$stTGFamSoftLoc|g' tgfam_install_centos.s
 system("cp -rf ./test_sample/PROGRAM_PATH_sample.config ./test_sample/PROGRAM_PATH_test.config");
 system("perl -pi -e 's|setTGFamSoftLoc|$stTGFamSoftLoc|g' ./test_sample/PROGRAM_PATH_test.config");
 
+	$rc =~ s/\s+//g;
+        if ($rc =~ /N/i){
+		system("perl -pi -e 's|$stTGFamSoftLoc/interproscan-5.22-61.0||g' ./test_sample/PROGRAM_PATH_test.config");
+	} else {
+	}
+
+
 system("cp -rf ./test_sample/RESOURCE_sample.config ./test_sample/RESOURCE_test.config");
 system("perl -pi -e 's|setTGFamSoftLoc|$stTGFamSoftLoc|g' ./test_sample/RESOURCE_test.config");
 

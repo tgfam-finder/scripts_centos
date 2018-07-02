@@ -11,7 +11,7 @@ use strict;
 
 my $stAssembly = "$CDS_OF_TARGET_GENOME";
 my $stCodon = "$TGFAM_SCRIPTS_PATH/CodonUsage";
-my $stMergeOut = "$PROTEINS_FOR_DOMAIN_IDENTIFICATION.Consensus";
+my $stMergeOut = "$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
 
 my $stName = "";
 my $stSeq = "";
@@ -79,7 +79,12 @@ while(my $stLine = <DATA>)
 				if ($stTrans[$i] !~ /\*./)
 				{
 					$stTrans1 = $stTrans[$i];
+					last;
 				}
+			}
+			if($stSeq % 3 == 0 )
+			{
+				$stTrans1 = $stTrans[0];
 			}
 
 			if($stTrans1 !~ /\*./)
@@ -114,8 +119,8 @@ close(DATA);
 close(OUT);
 
 my $stPfamID=$TARGET_DOMAIN_ID; #
-my $stPubGff="$GFF3_OF_TARGET_GENOME.tempID.gff3"; #
-my $stPubPEP="$PROTEINS_FOR_DOMAIN_IDENTIFICATION.Consensus";
+my $stPubGff="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.tempID.gff3"; #
+my $stPubPEP="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
 my $stPubTSV="$TSV_FOR_DOMAIN_IDENTIFICATION";
 my $stExceptID="$EXCLUDED_DOMAIN_ID"; #
 
@@ -365,7 +370,7 @@ close(FH);
 
 my $stGff3 = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.Merge.gff3";
 my $stOut = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
-my $stIDInfo = "$TARGET_GENOME.changeID.Info";
+my $stIDInfo = "$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.changeID.Info";
 my $stGenome = "$TARGET_GENOME";
 
 my $nCnt = 0;
@@ -593,7 +598,12 @@ while(my $stLine = <DATA>)
 				if ($stTrans[$i] !~ /\*./)
 				{
 					$stTrans1 = $stTrans[$i];
+					last;
 				}
+			}
+			if($stSeq % 3 == 0 )
+			{
+				$stTrans1 = $stTrans[0];
 			}
 
 			if($stTrans1 !~ /\*./)
