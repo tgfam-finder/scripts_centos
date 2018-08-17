@@ -82,7 +82,7 @@ while(my $stLine = <DATA>)
 					last;
 				}
 			}
-			if($stSeq % 3 == 0 )
+			if((length($stSeq) % 3 == 0 )&&($stTrans[0] !~ /\*./))
 			{
 				$stTrans1 = $stTrans[0];
 			}
@@ -136,8 +136,8 @@ my $stPM_TSV=glob("*.RefPEP.Consensus.Repre.PEP.fa.noStop.tsv");
 my $stAug_Gff=glob("*.augustus.gff3.filter");
 my $stAug_PEP=glob("*.augustus.PEP.fa.filter");
 my $stAug_TSV=glob("*.augustus.PEP.fa.filter.noStop.tsv");
-my $stPM_Aug_Gff=glob("*.gff3.PM_Augustus");
-my $stPM_Aug_PEP=glob("*.PEP.fa.PM_Augustus");
+my $stPM_Aug_Gff=glob("*.gff3.PM.Augustus");
+my $stPM_Aug_PEP=glob("*.PEP.fa.PM.Augustus");
 my $stIS_Aug_Par_Gff=glob("*.gff3.ISGAP.Aug.Partial_Augustus");
 my $stIS_Aug_Par_PEP=glob("*.PEP.fa.ISGAP.Aug.Partial_Augustus");
 
@@ -601,7 +601,7 @@ while(my $stLine = <DATA>)
 					last;
 				}
 			}
-			if($stSeq % 3 == 0 )
+			if((length($stSeq) % 3 == 0 )&&($stTrans[0] !~ /\*./))
 			{
 				$stTrans1 = $stTrans[0];
 			}
