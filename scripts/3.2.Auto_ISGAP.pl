@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "################# 3.2.Auto_ISGAP.pl is started #################\n";
+
 my @stGenome = glob("*.genome.fa");
 my @stProtein = glob("*.protein.fa");
 
@@ -57,9 +59,6 @@ system("rm -rf *.genome.fa *.protein.fa *.exonerate.out");
 	{
 		chomp($stLine);
 		my @stInfo = split /[\s\t]+/, $stLine;
-		$stInfo[1] =~ s/Transcript_//g;
-		$stInfo[1] =~ s/\//./g;
-		$stInfo[1] =~ s/Confidence_[\.0-9]+_//g;
 		$stList{$stInfo[1]} = $stInfo[$#stInfo];
 		
 	}
@@ -541,9 +540,6 @@ close(FH);
 	while(my $stLine = <DATA>)
 	{
 		chomp($stLine);
-		$stLine =~ s/Transcript_//g;
-		$stLine =~ s/\//./g;
-		$stLine =~ s/Confidence_[0-9\.]+_//g;
 		if($stLine =~ /^>([^\s]+)/)
 		{
 			if($stName ne "")
@@ -2193,9 +2189,6 @@ system("rm -rf *.seq");
 	{
 		chomp($stLine);
 		my @stInfo = split /[\s\t]+/, $stLine;
-		$stInfo[1] =~ s/Transcript_//g;
-		$stInfo[1] =~ s/\//./g;
-		$stInfo[1] =~ s/Confidence_[\.0-9]+_//g;
 		$stList{$stInfo[1]} = $stInfo[$#stInfo];
 		
 	}
@@ -3159,4 +3152,67 @@ close(FH7);
 sleep 3;
 system("rm -rf $stPrefix.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop.tsv");
 system("$IPRSCAN_PATH/interproscan.sh -appl pfam -i $stPrefix.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop -f tsv");
+
+### system("perl /var2/TGFam/scripts/RunHmm.Generate.tsv.pl $HMMER_BIN_PATH /var2/script/PF00096.hmm $stPrefix.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop $stPrefix.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop.tsv 08-02-2019 $stPrefix.Final.GeneModel.Whole.Repre.sort");
+
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+my $now = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday);
+
+my $stDate = $now;
+my ($stDomain,$nIdx,$stPFam,$stGene, $nDomainLen);
+
+
+if ($HMM_MATRIX_NAME eq "") {
+}
+else {
+
+system("$HMMER_BIN_PATH/hmmsearch $HMM_MATRIX_NAME $OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop > $OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.search.out");
+
+open(DATA, "$OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.search.out");
+open(OUT, ">$OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.SelfBuild.Hmm.out");
+while(my $stLine = <DATA>)
+{
+	chomp($stLine);
+	if ($stLine =~ /^Query:[\t\s]+([^\s]+)[\s\t]+\[M=([0-9]+)\]/)
+	{
+		$stDomain = $1;
+		$nDomainLen = $2-1;
+		$nIdx = 0;
+	}
+	elsif ($stLine =~ /^Accession:[\t\s]+([^\s]+)/)
+	{
+		$stPFam = $1;
+	}
+	elsif($stLine =~ />> ([^\s]+)/)
+	{
+		$stGene = $1;
+	}
+	elsif($stLine =~ /---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----/)
+	{
+		$nIdx++;
+	}
+	elsif (($nIdx == 1)&&($stLine ne ""))
+	{
+		my @stList = split /[\s\t]+/, $stLine;
+		my $stTemp = join (",", @stList);
+		next if ($stList[5]>$HMM_CUTOFF);
+		print OUT "$stGene	Additional_Search	$nDomainLen	HMM	$stPFam	$stDomain	$stList[10]	$stList[11]	$stList[5]	T	$stDate\n";
+		
+	}
+	elsif($stLine eq "")
+	{
+		$nIdx = 0;
+	}
+}
+close(DATA);
+close(OUT);
+
+system("cat $OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.SelfBuild.Hmm.out >> $OUTPUT_PREFIX.Final.GeneModel.Whole.Repre.sort.PEP.fa.noStop.tsv");
+
+}
+
+
 system("rm -rf NewAssembly.fa");
+
+print "\n################# 3.2.Auto_ISGAP.pl is finished ################\n\n";

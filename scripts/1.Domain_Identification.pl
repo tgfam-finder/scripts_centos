@@ -9,9 +9,11 @@ BEGIN {
 
 use strict;
 
+print "############ 1.Domain_Identification.pl is started #############\n";
+
 my $stData = $TARGET_GENOME; ### genome fasta file (tempID)
 my $stGff3 = $GFF3_OF_TARGET_GENOME;
-my $stTSV = $TSV_FOR_DOMAIN_IDENTIFICATION;
+my $stTSV = "$RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition";
 my $stTSVOutput = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 my $stPEP = $PROTEINS_FOR_DOMAIN_IDENTIFICATION;
 my $stPrefix = $OUTPUT_PREFIX;
@@ -19,6 +21,12 @@ my $stPfamIDs = $TARGET_DOMAIN_ID;
 my $stDomains = $TARGET_DOMAIN_NAME;
 my $stRepreDom = $REPRESENTATIVE_DOMAIN_NAME;
 my $nPerc = "100";	###	percent
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+my $now = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday); 
+
+my $stDate = $now;
+my ($stDomain,$nIdx,$stPFam,$stGene, $nDomainLen);
 
 my @stPfamID=split(/,/,$stPfamIDs);
 my @stDomain=split(/,/,$stDomains);
@@ -29,6 +37,54 @@ $stOut =~ s/\.fasta//;
 $stOut =~ s/\.fa//;
 my $stMerge = "";
 
+if ($HMM_MATRIX_NAME eq "") {
+}
+else {
+
+system("$HMMER_BIN_PATH/hmmsearch $HMM_MATRIX_NAME $PROTEINS_FOR_DOMAIN_IDENTIFICATION > $RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition.search.out");
+
+open(DATA, "$RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition.search.out");
+open(OUT, ">$RUNNING_PATH/$OUTPUT_PREFIX.addition.SelfBuild.Hmm.out");
+while(my $stLine = <DATA>)
+{
+	chomp($stLine);
+	if ($stLine =~ /^Query:[\t\s]+([^\s]+)[\s\t]+\[M=([0-9]+)\]/)
+	{
+		$stDomain = $1;
+		$nDomainLen = $2-1;
+		$nIdx = 0;
+	}
+	elsif ($stLine =~ /^Accession:[\t\s]+([^\s]+)/)
+	{
+		$stPFam = $1;
+	}
+	elsif($stLine =~ />> ([^\s]+)/)
+	{
+		$stGene = $1;
+	}
+	elsif($stLine =~ /---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----/)
+	{
+		$nIdx++;
+	}
+	elsif (($nIdx == 1)&&($stLine ne ""))
+	{
+		my @stList = split /[\s\t]+/, $stLine;
+		my $stTemp = join (",", @stList);
+		next if ($stList[5]>$HMM_CUTOFF);
+		print OUT "$stGene	Additional_Search	$nDomainLen	HMM	$stPFam	$stDomain	$stList[10]	$stList[11]	$stList[5]	T	$stDate\n";
+
+        }
+	elsif($stLine eq "")
+	{
+		$nIdx = 0;
+	}
+}
+close(DATA);
+close(OUT);
+
+}
+
+system("cat $TSV_FOR_DOMAIN_IDENTIFICATION $OUTPUT_PREFIX.addition.SelfBuild.Hmm.out > $RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition");
 
 for(my $i=0; $i<@stPfamID; $i++)
 {
@@ -725,3 +781,4 @@ open (FH13, ">$stPrefix.tempID.Masked.Except"."$stRepreDom".".fasta.Main.fa") ||
 	}
 	close DATA;
 close(FH13);
+print "\n############ 1.Domain_Identification.pl is finished ############\n\n";

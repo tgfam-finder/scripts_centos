@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############### 4.3.Auto_Augustus.pl is started ################\n";
+
 system("cp -rf $RUNNING_PATH/$ISGAP_ANALYSIS_PATH/temp_ISGAP.$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME/$OUTPUT_PREFIX.transcripts.Info $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.transcripts.Info"); 
 
 
@@ -578,9 +580,6 @@ system("rm -rf *.seq");
 	{
 		chomp($stLine);
 		my @stInfo = split /[\s\t]+/, $stLine;
-		$stInfo[1] =~ s/Transcript_//g;
-		$stInfo[1] =~ s/\//./g;
-		$stInfo[1] =~ s/Confidence_[\.0-9]+_//g;
 		$stList{$stInfo[1]} = $stInfo[$#stInfo];
 		
 	}
@@ -1475,7 +1474,67 @@ close(FH6);
 sleep 3;
 system("rm -rf $stPrefix.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop.tsv");
 system("$IPRSCAN_PATH/interproscan.sh -appl pfam -i $stPrefix.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop -f tsv");
+
+### system("perl /var2/TGFam/scripts/RunHmm.Generate.tsv.pl $HMMER_BIN_PATH /var2/script/PF00096.hmm $stPrefix.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop $stPrefix.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop.tsv 08-02-2019 $stPrefix.ISGAP.Augustus.Whole.Repre.sort");
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+my $now = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday);
+
+my $stDate = $now;
+my ($stDomain,$nIdx,$stPFam,$stGene, $nDomainLen);
+
+if ($HMM_MATRIX_NAME eq "") {
+}
+else {
+
+system("$HMMER_BIN_PATH/hmmsearch $HMM_MATRIX_NAME $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop > $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.search.out");
+
+open(DATA, "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.search.out");
+open(OUT, ">$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.SelfBuild.Hmm.out");
+while(my $stLine = <DATA>)
+{
+	chomp($stLine);
+	if ($stLine =~ /^Query:[\t\s]+([^\s]+)[\s\t]+\[M=([0-9]+)\]/)
+	{
+		$stDomain = $1;
+		$nDomainLen = $2-1;
+		$nIdx = 0;
+	}
+	elsif ($stLine =~ /^Accession:[\t\s]+([^\s]+)/)
+	{
+		$stPFam = $1;
+	}
+	elsif($stLine =~ />> ([^\s]+)/)
+	{
+		$stGene = $1;
+	}
+	elsif($stLine =~ /---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----/)
+	{
+		$nIdx++;
+	}
+	elsif (($nIdx == 1)&&($stLine ne ""))
+	{
+		my @stList = split /[\s\t]+/, $stLine;
+		my $stTemp = join (",", @stList);
+		next if ($stList[5]>$HMM_CUTOFF);
+		print OUT "$stGene	Additional_Search	$nDomainLen	HMM	$stPFam	$stDomain	$stList[10]	$stList[11]	$stList[5]	T	$stDate\n";
+		
+	}
+	elsif($stLine eq "")
+	{
+		$nIdx = 0;
+	}
+}
+close(DATA);
+close(OUT);
+
+system("cat $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.SelfBuild.Hmm.out >> $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.PEP.fa.noStop.tsv");
+
+}
+
 system("cp $stPrefix.ISGAP.Augustus.Whole.Repre.sort.*.fa *.tsv $stPrefix.ISGAP.Augustus.Whole.Repre.sort.gff3 $RUNNING_PATH/$MERGING_ANALYSIS_PATH");
 
 system("cp *.ISGAP.Augustus.Whole.Repre.sort.* $RUNNING_PATH/$MERGING_ANALYSIS_PATH");
 system("rm -rf NewAssembly.fa");
+
+print "\n############### 4.3.Auto_Augustus.pl is finished ###############\n\n";

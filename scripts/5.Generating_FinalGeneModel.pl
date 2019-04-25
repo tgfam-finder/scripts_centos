@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "########## 5.Generating_FinalGeneModel.pl is started ###########\n";
+
 my $stAssembly = "$CDS_OF_TARGET_GENOME";
 my $stCodon = "$TGFAM_SCRIPTS_PATH/CodonUsage";
 my $stMergeOut = "$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
@@ -121,7 +123,7 @@ close(OUT);
 my $stPfamID=$TARGET_DOMAIN_ID; #
 my $stPubGff="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.tempID.gff3"; #
 my $stPubPEP="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
-my $stPubTSV="$TSV_FOR_DOMAIN_IDENTIFICATION";
+my $stPubTSV="$RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition";
 my $stExceptID="$EXCLUDED_DOMAIN_ID"; #
 
 my $stISGAP_Gff=glob("*.Final.GeneModel.Whole.Repre.sort.gff3.filter");
@@ -659,6 +661,67 @@ close (FH2);
 
 system("rm -rf $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop.tsv");
 system("$IPRSCAN_PATH/interproscan.sh -appl pfam -i $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop -f tsv");
+
+
+### system("perl /var2/TGFam/scripts/RunHmm.Generate.tsv.pl $HMMER_BIN_PATH /var2/script/PF00096.hmm $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop.tsv 08-02-2019 $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam");
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+my $now = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday);
+
+my $stDate = $now;
+my ($stDomain,$nIdx,$stPFam,$stGene, $nDomainLen);
+
+if ($HMM_MATRIX_NAME eq "") {
+}
+else {
+
+system("$HMMER_BIN_PATH/hmmsearch $HMM_MATRIX_NAME $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop > $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.search.out");
+
+open(DATA, "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.search.out");
+open(OUT, ">$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.SelfBuild.Hmm.out");
+while(my $stLine = <DATA>)
+{
+	chomp($stLine);
+	if ($stLine =~ /^Query:[\t\s]+([^\s]+)[\s\t]+\[M=([0-9]+)\]/)
+	{
+		$stDomain = $1;
+		$nDomainLen = $2-1;
+		$nIdx = 0;
+	}
+	elsif ($stLine =~ /^Accession:[\t\s]+([^\s]+)/)
+	{
+		$stPFam = $1;
+	}
+	elsif($stLine =~ />> ([^\s]+)/)
+	{
+		$stGene = $1;
+	}
+	elsif($stLine =~ /---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----/)
+	{
+		$nIdx++;
+	}
+	elsif (($nIdx == 1)&&($stLine ne ""))
+	{
+		my @stList = split /[\s\t]+/, $stLine;
+		my $stTemp = join (",", @stList);
+		next if ($stList[5]>$HMM_CUTOFF);
+		print OUT "$stGene	Additional_Search	$nDomainLen	HMM	$stPFam	$stDomain	$stList[10]	$stList[11]	$stList[5]	T	$stDate\n";
+		
+	}
+	elsif($stLine eq "")
+	{
+		$nIdx = 0;
+	}
+}
+close(DATA);
+close(OUT);
+
+system("cat $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.SelfBuild.Hmm.out >> $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop.tsv");
+
+}
+
 system("rm -rf $OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.PEP.fa.noStop");
 system("mv $RUNNING_PATH/$MERGING_ANALYSIS_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.TGFam.* $RUNNING_PATH/$FINAL_ANALYSIS_PATH");
 system("rm -rf NewAssembly.fa");
+
+print "\n########## 5.Generating_FinalGeneModel.pl is finished ##########\n\n";

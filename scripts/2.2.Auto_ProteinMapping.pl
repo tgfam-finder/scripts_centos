@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############ 2.2.Auto_ProteinMapping.pl is started #############\n";
+
 my @stGenome = glob("*.genome.fa");
 my @stProtein = glob("*.protein.fa");
 
@@ -62,9 +64,6 @@ system("rm -rf *.genome.fa *.protein.fa *.exonerate.out");
 	{
 		chomp($stLine);
 		my @stInfo = split /[\s\t]+/, $stLine;
-		$stInfo[1] =~ s/Transcript_//g;
-		$stInfo[1] =~ s/\//./g;
-		$stInfo[1] =~ s/Confidence_[\.0-9]+_//g;
 		$stList{$stInfo[1]} = $stInfo[$#stInfo];
 		
 	}
@@ -573,7 +572,7 @@ close(FH2);
 	close(DATA);
 	close(OUT);
 
-	print "$nCnt1	$nCnt2\n";
+	#print "$nCnt1	$nCnt2\n";
 
 
 ####     Extension 3 base pairs       ###
@@ -717,7 +716,7 @@ close(FH2);
 				$stScaffold{$stName} = $stSeq;
 			}
 			$stName = $1;
-			print "$stName\n";
+			#print "$stName\n";
 			$stSeq = "";
 		}
 		else
@@ -1903,7 +1902,7 @@ close (FH7);
 				}
 				else
 				{
-					print "$stName\n$stTrans1\n";
+					#print "$stName\n$stTrans1\n";
 				}
 			}
 			$stName = $stLine;
@@ -1942,4 +1941,63 @@ close (FH8);
 
 system("rm -rf $stPrefix.RefPEP.Consensus.Repre.PEP.fa.noStop.tsv");
 system("$IPRSCAN_PATH/interproscan.sh -appl pfam -i $stPrefix.RefPEP.Consensus.Repre.PEP.fa.noStop -f tsv");
+
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(); 
+my $now = sprintf("%04d-%02d-%02d", $year + 1900, $mon + 1, $mday); 
+ 
+my $stDate = $now; 
+my ($stDomain,$nIdx,$stPFam,$stGene, $nDomainLen);
+
+if ($HMM_MATRIX_NAME eq "") {
+}
+else {
+
+system("$HMMER_BIN_PATH/hmmsearch $HMM_MATRIX_NAME $OUTPUT_PREFIX.RefPEP.Consensus.Repre.PEP.fa.noStop > $OUTPUT_PREFIX.RefPEP.Consensus.Repre.search.out");
+
+open(DATA, "$OUTPUT_PREFIX.RefPEP.Consensus.Repre.search.out");
+open(OUT, ">$OUTPUT_PREFIX.RefPEP.Consensus.Repre.SelfBuild.Hmm.out");
+while(my $stLine = <DATA>)
+{
+	chomp($stLine);
+	if ($stLine =~ /^Query:[\t\s]+([^\s]+)[\s\t]+\[M=([0-9]+)\]/)
+	{
+		$stDomain = $1;
+		$nDomainLen = $2-1;
+		$nIdx = 0;
+	}
+	elsif ($stLine =~ /^Accession:[\t\s]+([^\s]+)/)
+	{
+		$stPFam = $1;
+	}
+	elsif($stLine =~ />> ([^\s]+)/)
+	{
+		$stGene = $1;
+	}
+	elsif($stLine =~ /---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----/)
+	{
+		$nIdx++;
+	}
+	elsif (($nIdx == 1)&&($stLine ne ""))
+	{
+		my @stList = split /[\s\t]+/, $stLine;
+		my $stTemp = join (",", @stList);
+		next if ($stList[5]>$HMM_CUTOFF);
+		print OUT "$stGene	Additional_Search	$nDomainLen	HMM	$stPFam	$stDomain	$stList[10]	$stList[11]	$stList[5]	T	$stDate\n";
+		
+	}
+	elsif($stLine eq "")
+	{
+		$nIdx = 0;
+	}
+}
+close(DATA);
+close(OUT);
+
+system("cat $OUTPUT_PREFIX.RefPEP.Consensus.Repre.SelfBuild.Hmm.out >> $OUTPUT_PREFIX.RefPEP.Consensus.Repre.PEP.fa.noStop.tsv");
+
+}
+
+
 system("rm -rf NewAssembly.fa");
+
+print "\n############ 2.2.Auto_ProteinMapping.pl is finished ############\n\n";
