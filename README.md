@@ -320,6 +320,8 @@ TGFam-Finder provides an automatic install script, but if you want to use TGFam-
 - If users want to obtain final gene model including existing gene model of the target genome, users need to input CDS_OF_TARGET_GENOME and GFF3_OF_TARGET_GENOME. 
 - IDs in peptides (not RESOURCE_PROTEIN), tsv, coding DNA sequences, and gff3 should be matched. If users use merged peptides and tsv of genomes including target and allied species, IDs of the peptides and tsv should contain IDs of CDS and gff3. 
 - If users don’t insert RNASeq information, ISGAP and related analyses will not be performed and final gene model is generated combining protein mapping and augustus annotation except for ISGAP and related analyses.
+- For annotation of genes having short target domains such as C2H2 zinc finger, we recommend that users register HMM_MATRIX_NANE for hmm matrix for specific domain ID(s). For example, we used PF00096.hmm in Pfam hmm matrix for annotation
+of C2H2 zinc finger gene families in animal genomes. 
 
 > 6.3 Cautions for preparation of genomic resources
 
