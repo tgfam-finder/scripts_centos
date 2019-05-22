@@ -2,8 +2,8 @@
 cd setTGFamSoftLoc;
 wget http://tgfam-finder.snu.ac.kr/data/bowtie2-2.3.1-legacy-linux-x86_64.zip;
 wget http://tgfam-finder.snu.ac.kr/data/hmmer-3.1b2-linux-intel-x86_64.tar.gz;
-wget http://tgfam-finder.snu.ac.kr/data/ncbi-blast-2.6.0+-x64-linux.tar.gz;
-wget http://tgfam-finder.snu.ac.kr/data/ncbi-blast-2.6.0+-x64-linux.tar.gz.md5;
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz;
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.6.0/ncbi-blast-2.6.0+-x64-linux.tar.gz.md5;
 wget http://tgfam-finder.snu.ac.kr/data/exonerate-2.2.0-x86_64.tar.gz;
 wget http://tgfam-finder.snu.ac.kr/data/tophat-2.1.1.Linux_x86_64.tar.gz;
 wget http://tgfam-finder.snu.ac.kr/data/cufflinks-2.2.1.Linux_x86_64.tar.gz;
