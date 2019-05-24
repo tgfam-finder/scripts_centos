@@ -46,7 +46,7 @@ Prior to installation of TGFam-Finder, users should complete installation of fol
 
 
 
-- Basically, the installation script performs full auto-installation of the prerequisite tools that we mentioned in the section **“System requirements for installation of TGFam-Finder”**. Considering huge size of InterproScan causing download delay, users can do partial installation except for installation of InterproScan v5. We recommend that if users are hard to download InterproScan through our package, users should use the install script after direct download from the website (https://www.ebi.ac.uk/interpro/download.html) and self-installation of InterproScan. For users who want to manually setup the prerequisite tools, users can only use the annotation scripts. If users consider manual installation of all prerequisite tools, see the section 5 **“Information of the used prerequisite tools”**.
+- Basically, the installation script performs full auto-installation of the prerequisite tools that we mentioned in the section **“System requirements for installation of TGFam-Finder”**. Considering huge size of InterproScan causing download delay, users can do partial installation except for installation of InterproScan v5. We recommend that if users are hard to download InterproScan through our package, users should use the install script (option "N") after direct download from the website (https://www.ebi.ac.uk/interpro/download.html) and self-installation of InterproScan. For users who want to manually setup the prerequisite tools, users can only use the annotation scripts. If users consider manual installation of all prerequisite tools, see the section 5 **“Information of the used prerequisite tools”**.
 
 	**Usage:** 
 
