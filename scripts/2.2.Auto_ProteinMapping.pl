@@ -1674,7 +1674,7 @@ close (FH1);
 				else
 				{
 					$num=0;
-					$stList{$stKey}=$stList{$stKey}."$stLine\|";
+					$stList{$stKey}=$stList{$stKey}."$stLine\^";
 					$num++;
 				}
 				$dupl{$stKey}="OK";
@@ -1682,7 +1682,7 @@ close (FH1);
 			}
 			elsif($num == 1)
 			{
-				$stList{$stKey}=$stList{$stKey}."$stLine\|";
+				$stList{$stKey}=$stList{$stKey}."$stLine\^";
 			}
 		}
 	}
@@ -1712,7 +1712,7 @@ open (FH7, ">$stPrefix.RefPEP.Consensus.Repre.gff3") || die ("Can't open myfile"
 			$stType=$1;
 		}
 		$stGenePos =~ s/;[^\s]+;$//g;
-		my @stInfo=split(/\|/,$stList{$stGenePos});
+		my @stInfo=split(/\^/,$stList{$stGenePos});
 		for(my $j=0; $j<@stInfo; $j++)
 		{
 			print FH7 "$stInfo[$j]$stType\n";
