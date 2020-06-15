@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############### 4.1.Auto_Augustus.pl is started ################\n";
+
 system("rm -rf $RUNNING_PATH/$AUGUSTUS_ANALYSIS_PATH/*");
 system("cp -rf $RUNNING_PATH/$PROTEIN_MAPPING_ANALYSIS_PATH/temp_protein.$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME/$OUTPUT_PREFIX.RefPEP.Consensus.Repre.* $RUNNING_PATH/$MERGING_ANALYSIS_PATH"); 
 system("cp -rf $RUNNING_PATH/$ISGAP_ANALYSIS_PATH/temp_ISGAP.$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME/$OUTPUT_PREFIX.Final.GeneModel.* $RUNNING_PATH/$MERGING_ANALYSIS_PATH"); 
@@ -634,3 +636,5 @@ for(my $i=0; $i<@stPrefix; $i++)
 		close(FH6);
 
 }
+
+print "\n############### 4.1.Auto_Augustus.pl is finished ###############\n\n";

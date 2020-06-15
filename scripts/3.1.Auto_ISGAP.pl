@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "################# 3.1.Auto_ISGAP.pl is started #################\n";
+
 system("$BOWTIE_PATH/bowtie2-build $RUNNING_PATH/$OUTPUT_PREFIX.tempID.Masked.Except$REPRESENTATIVE_DOMAIN_NAME.fasta.Main.fa $OUTPUT_PREFIX");
 
 system("perl $TGFAM_SCRIPTS_PATH/TopHat_Cufflink_Pipeline.pl $ARGV[0] $ARGV[1] $ARGV[2] -num-threads $THREADS -Bowtie2_Index $OUTPUT_PREFIX -For $RNASEQ_FORWARD_PATH -Rev $RNASEQ_REVERSE_PATH");
@@ -185,9 +187,6 @@ unless (-d "temp_ISGAP.$outputPrefix\_$stDomainName")
 	while(my $stLine = <DATA>)
 	{
 		chomp($stLine);
-	#	$stLine =~ s/Transcript_//g;
-	#	$stLine =~ s/\//./g;
-	#	$stLine =~ s/Confidence_[\.0-9]+_//g;
 		if($stLine =~ /^>([^\s]+)/)
 		{
 			if($stSeq ne "")
@@ -230,10 +229,6 @@ unless (-d "temp_ISGAP.$outputPrefix\_$stDomainName")
 	while (my $stLine = <DATA>)
 	{
 		chomp($stLine);
-	#	$stLine =~ s/Transcript_//g;
-	#	$stLine =~ s/\//./g;
-	#	$stLine =~ s/Confidence_[\.0-9]+_//g;
-
 		if($stLine =~ /^# Query: ([^\s]+)/)
 		{
 			$stName = $1;
@@ -294,3 +289,5 @@ sleep 3;
 system("mv *.genome.fa temp_ISGAP.$outputPrefix\_$stDomainName");
 sleep 3;
 system("mv *.protein.fa temp_ISGAP.$outputPrefix\_$stDomainName");
+
+print "\n################# 3.1.Auto_ISGAP.pl is finished ################\n\n";

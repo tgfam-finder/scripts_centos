@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############## 4.4.1.Auto_Augustus.pl is started ###############\n";
+
 system("cp -rf $RUNNING_PATH/$PROTEIN_MAPPING_ANALYSIS_PATH/temp*/*RefPEP.Protein.sorted.PosiModi.gff3 $RUNNING_PATH/$PROTEIN_MAPPING_ANALYSIS_PATH/temp*/*RefPEP.Mapped.CDS.fa $RUNNING_PATH/$AUGUSTUS_ANALYSIS_PATH/*.filter $RUNNING_PATH/$PM_AUGUSTUS_ANALYSIS_PATH");
 
 my $stExonerateGff = "$OUTPUT_PREFIX.RefPEP.Protein.sorted.PosiModi.gff3"; #RefPEP.Protein.sorted.PosiModi.gff3
@@ -218,3 +220,5 @@ close(DATA);
 close(OUT);
 
 system("cp *.PM.Augustus $RUNNING_PATH/$MERGING_ANALYSIS_PATH");
+
+print "\n############## 4.4.1.Auto_Augustus.pl is finished ##############\n\n";

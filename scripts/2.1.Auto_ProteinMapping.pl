@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############ 2.1.Auto_ProteinMapping.pl is started #############\n";
+
 system("cp -rf $BLAST_DB_NAME* $RUNNING_PATH/$PROTEIN_MAPPING_ANALYSIS_PATH");
 system("cp -rf $RESOURCE_PROTEIN $RUNNING_PATH/$PROTEIN_MAPPING_ANALYSIS_PATH;");
 
@@ -136,9 +138,6 @@ open(DATA, "$stGenome");
 while(my $stLine = <DATA>)
 {
 	chomp($stLine);
-#	$stLine =~ s/Transcript_//g;
-#	$stLine =~ s/\//./g;
-#	$stLine =~ s/Confidence_[\.0-9]+_//g;
 	if($stLine =~ /^>([^\s]+)/)
 	{
 		if($stSeq ne "")
@@ -181,9 +180,6 @@ open(DATA, "$stBlast");
 while (my $stLine = <DATA>)
 {
 	chomp($stLine);
-#	$stLine =~ s/Transcript_//g;
-#	$stLine =~ s/\//./g;
-#	$stLine =~ s/Confidence_[\.0-9]+_//g;
 
 	if($stLine =~ /^# Query: ([^\s]+)/)
 	{
@@ -244,3 +240,5 @@ sleep 3;
 system("mv *.genome.fa temp_protein.$outputPrefix\_$stDomainName");
 sleep 3;
 system("mv *.protein.fa temp_protein.$outputPrefix\_$stDomainName");
+
+print "\n############ 2.1.Auto_ProteinMapping.pl is finished ############\n\n";

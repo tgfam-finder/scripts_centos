@@ -9,10 +9,11 @@ BEGIN {
 
 use strict;
 
+print "############# 0.SixFrameTranslation.pl is started ##############\n";
+
 my $stData = $TARGET_GENOME; ### genome fasta file (tempID)
 my $stGff3 = $GFF3_OF_TARGET_GENOME;
 my $stPrefix = $OUTPUT_PREFIX;
-my $stPrefixData = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 
 my $stOut = $stData;
 $stOut =~ s/\.fna//;
@@ -26,9 +27,9 @@ my $newID="";
 my $seq="";
 my $num=0;
 
-open FH1, ">", "$stPrefixData.tempID.fasta" || die ("Can't open myfile");
+open FH1, ">", "$stPrefix.tempID.fasta" || die ("Can't open myfile");
 open(DATA, "$stData");
-open FH, ">", "$stPrefixData.changeID.Info";
+open FH, ">", "$stPrefix.changeID.Info";
 while(my $stLine = <DATA>)
 {
         chomp($stLine);
@@ -68,7 +69,7 @@ my @stGene;
 my @stCDS;
 my $nIdx1=0;
 
-open FH5, ">", "$RUNNING_PATH/$stPrefixData.sort" || die ("Can't open myfile");
+open FH5, ">", "$RUNNING_PATH/$stPrefix.sort" || die ("Can't open myfile");
 
 open(DATA, "$stGff");
 while(my $stLine = <DATA>)
@@ -138,11 +139,11 @@ if($#stCDS != -1)
 
 close FH5;
 
-my $stData = "$RUNNING_PATH/$stPrefixData.sort"; ### gff
-my $stInfo = "$stPrefixData.changeID.Info"; ### changeID Info
+my $stData = "$RUNNING_PATH/$stPrefix.sort"; ### gff
+my $stInfo = "$stPrefix.changeID.Info"; ### changeID Info
 my %ID;
 
-open FH2, ">", "$stPrefixData.tempID.gff3" || die ("Can't open myfile");
+open FH2, ">", "$stPrefix.tempID.gff3" || die ("Can't open myfile");
 
 open(DATA, "$stInfo");
 while(my $stLine = <DATA>)
@@ -176,7 +177,7 @@ close FH2;
 ###     Six frame translation   ###
 
 my $stData= "$TGFAM_SCRIPTS_PATH/CodonUsage"; #codon usage
-my $stGenome= "$stPrefixData.tempID.fasta"; #genome fasta file, sequences should be connected 
+my $stGenome= "$stPrefix.tempID.fasta"; #genome fasta file, sequences should be connected 
 my ($count, $count1, $countX, $num)=(0,0,0,0);
 my $length="";
 my $last="";
@@ -409,4 +410,4 @@ while(my $stLine = <DATA>)
 close DATA;
 close FH4;
 
-system("$BLAST_BIN_PATH/makeblastdb -in $RESOURCE_PROTEIN -dbtype prot -out $BLAST_DB_NAME");
+print "\n############# 0.SixFrameTranslation.pl is finished #############\n\n";

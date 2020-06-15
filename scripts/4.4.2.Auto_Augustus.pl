@@ -9,6 +9,8 @@ BEGIN {
 
 use strict;
 
+print "############## 4.4.2.Auto_Augustus.pl is started ###############\n";
+
 system("cp -rf $RUNNING_PATH/$RNASEQ_AUGUSTUS_ANALYSIS_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort* $RUNNING_PATH/$AUGUSTUS_ANALYSIS_PATH/*.filter $RUNNING_PATH/$ISGAP_AUGUSTUS_ANALYSIS_PATH");
 
 my $stISGAP_AugustusGff = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.ISGAP.Augustus.Whole.Repre.sort.gff3"; #RefPEP.Protein.sorted.PosiModi.gff3
@@ -220,3 +222,5 @@ close(DATA);
 close(OUT);
 
 system("cp *.ISGAP.Aug.Partial_Augustus $RUNNING_PATH/$MERGING_ANALYSIS_PATH");
+
+print "\n############## 4.4.2.Auto_Augustus.pl is finished ##############\n\n";

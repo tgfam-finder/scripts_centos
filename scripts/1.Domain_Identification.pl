@@ -618,9 +618,8 @@ open FH10, ">", "$stPrefix.Final.$stRepreDom\domain.search.out.Extended.RemoveRe
 close FH10;
 
 ###	Genome masking	###
-	my $stPrefixData = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
 	my $stData = "$stPrefix.Final.$stRepreDom\domain.search.out.Extended.RemoveRedundant";
-	my $stGenome = "$stPrefixData.tempID.fasta";
+	my $stGenome = "$stPrefix.tempID.fasta";
 	my %Info;
 	my $stID="";
 	my $num=0;
@@ -781,4 +780,5 @@ open (FH13, ">$stPrefix.tempID.Masked.Except"."$stRepreDom".".fasta.Main.fa") ||
 	}
 	close DATA;
 close(FH13);
+system("$BLAST_BIN_PATH/makeblastdb -in $RESOURCE_PROTEIN -dbtype prot -out $BLAST_DB_NAME");
 print "\n############ 1.Domain_Identification.pl is finished ############\n\n";

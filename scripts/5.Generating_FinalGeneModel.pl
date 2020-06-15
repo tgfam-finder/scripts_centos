@@ -13,7 +13,7 @@ print "########## 5.Generating_FinalGeneModel.pl is started ###########\n";
 
 my $stAssembly = "$CDS_OF_TARGET_GENOME";
 my $stCodon = "$TGFAM_SCRIPTS_PATH/CodonUsage";
-my $stMergeOut = "$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
+my $stMergeOut = "$RUNNING_PATH/$OUTPUT_PREFIX.PEP.Consensus";
 
 my $stName = "";
 my $stSeq = "";
@@ -121,8 +121,8 @@ close(DATA);
 close(OUT);
 
 my $stPfamID=$TARGET_DOMAIN_ID; #
-my $stPubGff="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.tempID.gff3"; #
-my $stPubPEP="$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.PEP.Consensus";
+my $stPubGff="$RUNNING_PATH/$OUTPUT_PREFIX.tempID.gff3"; #
+my $stPubPEP="$RUNNING_PATH/$OUTPUT_PREFIX.PEP.Consensus";
 my $stPubTSV="$RUNNING_PATH/$OUTPUT_PREFIX.tsv.addition";
 my $stExceptID="$EXCLUDED_DOMAIN_ID"; #
 
@@ -158,17 +158,18 @@ my %stMerge10 = &Merge($stIS_Aug_Par_Gff, $stIS_Aug_Par_PEP, $stAug_TSV, $stPfam
 my %stMerge11 = &Merge($stAug_Gff, $stAug_PEP, $stAug_TSV, $stPfamID, "Full", \%stMerge10, $stExceptID, "TGFam.AUG");
 my %stMerge12 = &Merge($stPM_Aug_Gff, $stPM_Aug_PEP, $stAug_TSV, $stPfamID, "Partial", \%stMerge11, $stExceptID, "TGFam.PM");
 my %stMerge13 = &Merge($stPM_Gff, $stPM_PEP, $stPM_TSV, $stPfamID, "Partial", \%stMerge12, $stExceptID, "TGFam.PM");
+my %stMerge14 = &Merge($stAug_Gff, $stAug_PEP, $stAug_TSV, $stPfamID, "Partial", \%stMerge13, $stExceptID, "TGFam.AUG");
 #my %stMerge10 = &Merge($stAug_Gff, $stAug_PEP, $stAug_TSV, $stPfamID, "Partial", \%stMerge9, $stExceptID);
 
 
 open(FH, ">$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.Merge.gff3");
-foreach my $stKey (sort{($a =~ /tempCh([0-9]+)/)[0] <=> ($b =~ /tempCh([0-9]+)/)[0] || ($a =~ /[^\s]+_([^\s]+)_[^\s]+/)[0] <=> ($b =~ /[^\s]+_([^\s]+)_[^\s]+/)[0]}keys %stMerge13)
+foreach my $stKey (sort{($a =~ /tempCh([0-9]+)/)[0] <=> ($b =~ /tempCh([0-9]+)/)[0] || ($a =~ /[^\s]+_([^\s]+)_[^\s]+/)[0] <=> ($b =~ /[^\s]+_([^\s]+)_[^\s]+/)[0]}keys %stMerge14)
 {
 	my @stInfo=split(/\n/,$stMerge13{$stKey});
-	print FH "$stInfo[0]\n";
+	print FH "$stInfo[0]\n" if ($stInfo[0] =~ /[a-zA-Z]/);
 	my $stmRNA=$stInfo[0];
 	$stmRNA =~ s/	gene	/	mRNA	/;
-	print FH "$stmRNA\n";
+	print FH "$stmRNA\n" if ($stInfo[0] =~ /[a-zA-Z]/);
 	my @stInfo1=split(/\t/,$stInfo[0]);
 	my $stAttri=$stInfo1[8];
 	for(my $i=1; $i<@stInfo; $i++)
@@ -185,7 +186,7 @@ foreach my $stKey (sort{($a =~ /tempCh([0-9]+)/)[0] <=> ($b =~ /tempCh([0-9]+)/)
 			print FH "$stInfo2[0]	$stInfo2[1]	CDS	$stInfo2[3]	$stInfo2[4]	$stInfo2[5]	$stInfo2[6]	$stInfo2[7]	$stAttri\n";
 		}
 	}
-	print FH "\n";
+	print FH "\n"  if ($stInfo[0] =~ /[a-zA-Z]/); 
 #	print "$stMerge10{$stKey}\n";
 }
 
@@ -372,7 +373,7 @@ close(FH);
 
 my $stGff3 = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.Merge.gff3";
 my $stOut = "$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME";
-my $stIDInfo = "$RUNNING_PATH/$OUTPUT_PREFIX\_$REPRESENTATIVE_DOMAIN_NAME.changeID.Info";
+my $stIDInfo = "$RUNNING_PATH/$OUTPUT_PREFIX.changeID.Info";
 my $stGenome = "$TARGET_GENOME";
 
 my $nCnt = 0;
@@ -510,8 +511,10 @@ while(my $stLine = <DATA>)
 			$stGCDS = reverse($stGCDS);
 			$stGCDS =~ tr/ACGT/TGCA/;
 		}
-
-		print OUT ">$stName\n$stGCDS\n";
+		if(length($stGCDS)>2)
+		{
+			print OUT ">$stName\n$stGCDS\n";
+		}
 		$stGCDS = "";
 	}
 }
@@ -524,8 +527,10 @@ if($stGCDS ne "")
 		$stGCDS = reverse($stGCDS);
 		$stGCDS =~ tr/ACGT/TGCA/;
 	}
-
-	print OUT ">$stName\n$stGCDS\n";
+	if(length($stGCDS)>2)
+	{
+		print OUT ">$stName\n$stGCDS\n";
+	}
 }
 
 #print "$nCnt\n";
